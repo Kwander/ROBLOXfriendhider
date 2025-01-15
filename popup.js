@@ -1,70 +1,70 @@
-// Load and display blocked games
-function loadBlockedGames(searchTerm = '') {
-  chrome.storage.sync.get(['blockedGames'], function(result) {
+// Load and display blocked friends
+function loadBlockedFriends(searchTerm = '') {
+  chrome.storage.sync.get(['blockedFriends'], function(result) {
     const blockedList = document.getElementById('blocked-list');
     blockedList.innerHTML = '';
     
-    if (result.blockedGames && result.blockedGames.length > 0) {
+    if (result.blockedFriends && result.blockedFriends.length > 0) {
       // Reverse the array to show newest first
-      const games = [...result.blockedGames].reverse();
+      const friends = [...result.blockedFriends].reverse();
       
       if (searchTerm) {
         // Show search results
-        const filteredGames = games.filter(game => 
-          game.title.toLowerCase().includes(searchTerm.toLowerCase())
+        const filteredFriends = friends.filter(friend => 
+          friend.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         
-        if (filteredGames.length === 0) {
+        if (filteredFriends.length === 0) {
           blockedList.innerHTML = '<p>No matches found</p>';
           return;
         }
         
-        filteredGames.forEach(game => displayGame(game, blockedList));
+        filteredFriends.forEach(friend => displayFriend(friend, blockedList));
       } else {
-        // Show recent games (top 3)
-        blockedList.innerHTML = '<h4>Recently Blocked</h4>';
-        const recentGames = games.slice(0, 3);
-        recentGames.forEach(game => displayGame(game, blockedList));
+        // Show recent friends (top 3)
+        blockedList.innerHTML = '<h4>Recently Hidden</h4>';
+        const recentFriends = friends.slice(0, 3);
+        recentFriends.forEach(friend => displayFriend(friend, blockedList));
         
-        // Show total count if more than 3 games
-        if (games.length > 3) {
+        // Show total count if more than 3 friends
+        if (friends.length > 3) {
           const totalCount = document.createElement('p');
           totalCount.className = 'total-count';
-          totalCount.textContent = `Total blocked games: ${games.length}`;
+          totalCount.textContent = `Total hidden friends: ${friends.length}`;
           blockedList.appendChild(totalCount);
         }
       }
     } else {
-      blockedList.innerHTML = '<p>No blocked games</p>';
+      blockedList.innerHTML = '<p>No hidden friends</p>';
     }
   });
 }
 
-// Helper function to display a game entry
-function displayGame(game, container) {
-  const gameElement = document.createElement('div');
-  gameElement.className = 'blocked-game';
-  gameElement.innerHTML = `
-    <span>${game.title} <small>(ID: ${game.id})</small></span>
-    <button class="remove-btn" data-id="${game.id}">Remove</button>
+// Helper function to display a friend entry
+function displayFriend(friend, container) {
+  const friendElement = document.createElement('div');
+  friendElement.className = 'blocked-friend';
+  friendElement.innerHTML = `
+    <span>${friend.name} <small>(ID: ${friend.id})</small></span>
+    <button class="remove-btn" data-id="${friend.id}">Remove</button>
   `;
-  container.appendChild(gameElement);
+  container.appendChild(friendElement);
 }
 
 // Search functionality
 document.getElementById('search-input').addEventListener('input', function(e) {
-  loadBlockedGames(e.target.value.trim());
+  loadBlockedFriends(e.target.value.trim());
 });
 
-// Handle removing games
+// Handle removing friends
 document.addEventListener('click', function(e) {
   if (e.target.classList.contains('remove-btn')) {
-    const gameId = e.target.getAttribute('data-id');
-    chrome.storage.sync.get(['blockedGames'], function(result) {
-      const blockedGames = result.blockedGames || [];
-      const updatedGames = blockedGames.filter(game => game.id !== gameId);
-      chrome.storage.sync.set({ 'blockedGames': updatedGames }, function() {
-        loadBlockedGames();
+    const friendId = e.target.getAttribute('data-id');
+    chrome.storage.sync.get(['blockedFriends'], function(result) {
+      const blockedFriends = result.blockedFriends || [];
+      const updatedFriends = blockedFriends.filter(friend => friend.id !== friendId);
+      chrome.storage.sync.set({ 'blockedFriends': updatedFriends }, function() {
+        loadBlockedFriends();
       });
     });
   }
@@ -72,13 +72,13 @@ document.addEventListener('click', function(e) {
 
 // Export functionality
 document.getElementById('export-btn').addEventListener('click', function() {
-  chrome.storage.sync.get(['blockedGames'], function(result) {
-    const dataStr = JSON.stringify(result.blockedGames || []);
+  chrome.storage.sync.get(['blockedFriends'], function(result) {
+    const dataStr = JSON.stringify(result.blockedFriends || []);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
     
     const exportLink = document.createElement('a');
     exportLink.setAttribute('href', dataUri);
-    exportLink.setAttribute('download', 'blocked_games.json');
+    exportLink.setAttribute('download', 'hidden_friends.json');
     exportLink.click();
   });
 });
@@ -94,10 +94,10 @@ document.getElementById('import-input').addEventListener('change', function(e) {
     const reader = new FileReader();
     reader.onload = function(e) {
       try {
-        const importedGames = JSON.parse(e.target.result);
-        if (Array.isArray(importedGames)) {
-          chrome.storage.sync.set({ 'blockedGames': importedGames }, function() {
-            loadBlockedGames();
+        const importedFriends = JSON.parse(e.target.result);
+        if (Array.isArray(importedFriends)) {
+          chrome.storage.sync.set({ 'blockedFriends': importedFriends }, function() {
+            loadBlockedFriends();
           });
         }
       } catch (error) {
@@ -112,6 +112,6 @@ document.getElementById('import-input').addEventListener('change', function(e) {
 document.addEventListener('DOMContentLoaded', function() {
     // Clear search input on popup open
     document.getElementById('search-input').value = '';
-    // Load blocked games with empty search term to show recent
-    loadBlockedGames('');
+    // Load blocked friends with empty search term to show recent
+    loadBlockedFriends('');
 }); 

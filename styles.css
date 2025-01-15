@@ -1,8 +1,8 @@
-.game-block-btn {
+.friend-block-btn {
     position: absolute;
     top: 5px;
     right: 5px;
-    background-color: #4CAF50;
+    background-color: #ff4444;
     color: white;
     border: none;
     border-radius: 50%;
@@ -18,49 +18,18 @@
     transition: all 0.2s ease-in-out;
 }
 
-.game-block-btn:hover {
-    background-color: #45a049;
+.friend-block-btn:hover {
+    background-color: #cc0000;
     transform: scale(1.1);
-    opacity: 1;
 }
 
-.game-block-btn.blocked {
-    background-color: #ff0000;
-    opacity: 1;
-}
-
-.game-block-btn.blocked:hover {
-    background-color: #cc0000;
-}
-
-/* Show button when hovering over containers */
-.game-card:hover .game-block-btn,
-.list-item:hover .game-block-btn,
-.game-card-link:hover .game-block-btn,
-.game-calls-to-action:hover .game-block-btn {
-    opacity: 1;
-}
-
-.game-thumbnail-container {
-    position: relative;
-} 
-
-.game-page-block-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #ff0000;
-    opacity: 1;
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
-    z-index: 100;
-}
-
-.game-page-block-btn:hover {
-    background-color: #cc0000;
-}
-
-.game-calls-to-action {
+/* Handle both carousel tiles and list items */
+.friends-carousel-tile,
+.list-item.avatar-card {
     position: relative !important;
+}
+
+.friends-carousel-tile:hover .friend-block-btn,
+.list-item.avatar-card:hover .friend-block-btn {
+    opacity: 1;
 } 

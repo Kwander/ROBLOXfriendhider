@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Roblox Game Blocker",
-  "version": "0.0.0.2",
-  "description": "Hide unwanted Roblox games from your feed. Block games with one click and manage your blocked list easily.",
+  "name": "Roblox Friend Hider",
+  "version": "0.0.0.1",
+  "description": "Hide specific Roblox friends from your view with one click.",
   "permissions": [
     "storage"
   ],
@@ -30,6 +30,5 @@
     "32": "icon32.png",
     "48": "icon48.png",
     "128": "icon128.png"
-  },
-  "author": "catcatcut"
+  }
 } 
