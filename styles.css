@@ -9,13 +9,13 @@
     width: 24px;
     height: 24px;
     cursor: pointer;
-    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     opacity: 0;
     transition: all 0.2s ease-in-out;
+    z-index: 100;
 }
 
 .friend-block-btn:hover {
@@ -23,13 +23,18 @@
     transform: scale(1.1);
 }
 
-/* Handle both carousel tiles and list items */
-.friends-carousel-tile,
-.list-item.avatar-card {
-    position: relative !important;
+/* Only set position relative on the immediate container of the block button */
+.avatar-card-fullbody {
+    position: relative;
 }
 
+/* Show button on hover */
 .friends-carousel-tile:hover .friend-block-btn,
 .list-item.avatar-card:hover .friend-block-btn {
     opacity: 1;
+}
+
+/* Style for hidden friends */
+.friend-hidden {
+    cursor: default;
 } 

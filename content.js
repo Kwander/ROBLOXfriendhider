@@ -72,9 +72,12 @@ function addBlockButtons() {
                 }
             });
             
-            // Add the button to the element
-            element.style.position = 'relative';
-            element.appendChild(blockBtn);
+            // Add the button to the avatar element instead of the tile
+            const avatarElement = element.querySelector('.avatar-card-fullbody');
+            if (avatarElement) {
+                avatarElement.style.position = 'relative';
+                avatarElement.appendChild(blockBtn);
+            }
         }
     });
 }
@@ -86,12 +89,16 @@ function hideBlockedFriends() {
         const userId = getUserId(element);
         if (userId && blockedFriends.some(friend => friend.id === userId)) {
             if (element.classList.contains('list-item')) {
-                const container = element.querySelector('.avatar-card-container');
-                if (container) {
-                    container.style.display = 'none';
-                }
+                // Preserve the structure but make it invisible and non-interactive
+                element.style.opacity = '0';
+                element.style.pointerEvents = 'none';
+                // Add a class for additional styling if needed
+                element.classList.add('friend-hidden');
             } else {
-                element.parentElement.remove();
+                // For carousel items, do the same
+                element.style.opacity = '0';
+                element.style.pointerEvents = 'none';
+                element.classList.add('friend-hidden');
             }
         }
     });
